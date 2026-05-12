@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>jeanpierre-stats · GitHub Stats Service</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0D1117;
+      --surface: #161B22;
+      --border: #21262D;
+      --purple: #A855F7;
+      --purple-dim: #7C3AED;
+      --text: #E6EDF3;
+      --muted: #8B949E;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* ── Header ── */
+    header {
+      width: 100%;
+      border-bottom: 1px solid var(--border);
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 600;
+      font-size: 15px;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .logo svg { color: var(--purple); }
+
+    .gh-link {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 13px;
+      color: var(--text);
+      text-decoration: none;
+      background: var(--surface);
+      transition: border-color .2s, background .2s;
+    }
+
+    .gh-link:hover { border-color: var(--purple); background: #1C2128; }
+
+    /* ── Hero ── */
+    .hero {
+      text-align: center;
+      padding: 72px 24px 48px;
+      max-width: 680px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(168,85,247,.12);
+      border: 1px solid rgba(168,85,247,.3);
+      border-radius: 20px;
+      padding: 4px 12px;
+      font-size: 12px;
+      color: var(--purple);
+      margin-bottom: 24px;
+      font-weight: 500;
+    }
+
+    .badge::before {
+      content: "";
+      width: 6px; height: 6px;
+      background: var(--purple);
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: .5; transform: scale(1.4); }
+    }
+
+    h1 {
+      font-size: clamp(28px, 5vw, 44px);
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: -0.5px;
+      margin-bottom: 16px;
+    }
+
+    h1 span { color: var(--purple); }
+
+    .subtitle {
+      font-size: 16px;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 32px;
+    }
+
+    .cta-group {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      background: var(--purple);
+      color: #fff;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background .2s, transform .1s;
+    }
+
+    .btn-primary:hover { background: var(--purple-dim); transform: translateY(-1px); }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: border-color .2s;
+    }
+
+    .btn-secondary:hover { border-color: var(--purple); }
+
+    /* ── Cards preview ── */
+    .section {
+      width: 100%;
+      max-width: 900px;
+      padding: 0 24px 80px;
+    }
+
+    .section-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .cards-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      justify-content: center;
+    }
+
+    .card-frame {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      transition: border-color .2s, transform .2s;
+    }
+
+    .card-frame:hover { border-color: var(--purple); transform: translateY(-2px); }
+
+    .card-frame img { display: block; border-radius: 6px; }
+
+    .card-label {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 10px;
+      text-align: center;
+      letter-spacing: .04em;
+    }
+
+    /* ── Endpoints ── */
+    .endpoints { margin-top: 48px; }
+
+    .endpoint-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .endpoint-item:last-child { border-bottom: none; }
+
+    .method {
+      background: rgba(168,85,247,.15);
+      color: var(--purple);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-family: monospace;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .endpoint-path {
+      font-family: monospace;
+      font-size: 13px;
+      color: var(--text);
+    }
+
+    .endpoint-desc {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+
+    /* ── Footer ── */
+    footer {
+      margin-top: auto;
+      border-top: 1px solid var(--border);
+      width: 100%;
+      padding: 20px 24px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    footer a { color: var(--purple); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a class="logo" href="/">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+      </svg>
+      jeanpierre-stats
+    </a>
+    <a class="gh-link" href="https://github.com/jeanpierre-max/github-readme-stats" target="_blank" rel="noopener">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+      </svg>
+      Ver repositorio
+    </a>
+  </header>
+
+  <div class="hero">
+    <div class="badge">Servicio activo</div>
+    <h1>Servicio de <span>stats</span> para mi perfil</h1>
+    <p class="subtitle">
+      Instancia propia de GitHub Readme Stats. Genera tarjetas dinámicas con estadísticas de GitHub,
+      lenguajes y rachas directamente desde la API de GitHub.
+    </p>
+    <div class="cta-group">
+      <a class="btn-primary" href="https://github.com/jeanpierre-max/github-readme-stats" target="_blank" rel="noopener">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+        </svg>
+        Repositorio
+      </a>
+      <a class="btn-secondary" href="https://github.com/jeanpierre-max" target="_blank" rel="noopener">
+        Ver perfil de GitHub
+      </a>
+    </div>
+  </div>
+
+  <div class="section">
+    <p class="section-title">Tarjetas de ejemplo</p>
+    <div class="cards-grid">
+      <div class="card-frame">
+        <img
+          src="/api?username=jeanpierre-max&show_icons=true&theme=midnight-purple&hide_border=true&bg_color=0D1117&title_color=A855F7&icon_color=A855F7&text_color=ffffff&include_all_commits=true&count_private=true"
+          height="160"
+          alt="GitHub Stats"
+          loading="lazy"
+        />
+        <p class="card-label">Stats generales</p>
+      </div>
+      <div class="card-frame">
+        <img
+          src="/api/top-langs/?username=jeanpierre-max&layout=compact&theme=midnight-purple&hide_border=true&bg_color=0D1117&title_color=A855F7&text_color=ffffff&langs_count=8"
+          height="160"
+          alt="Top Languages"
+          loading="lazy"
+        />
+        <p class="card-label">Lenguajes más usados</p>
+      </div>
+    </div>
+
+    <div class="endpoints" style="margin-top:48px;">
+      <p class="section-title">Endpoints disponibles</p>
+      <div class="endpoint-item">
+        <span class="method">GET</span>
+        <div>
+          <div class="endpoint-path">/api?username=:user</div>
+          <div class="endpoint-desc">Tarjeta con estadísticas generales: commits, PRs, issues, estrellas y rango</div>
+        </div>
+      </div>
+      <div class="endpoint-item">
+        <span class="method">GET</span>
+        <div>
+          <div class="endpoint-path">/api/top-langs/?username=:user</div>
+          <div class="endpoint-desc">Tarjeta de lenguajes de programación más utilizados en tus repos</div>
+        </div>
+      </div>
+      <div class="endpoint-item">
+        <span class="method">GET</span>
+        <div>
+          <div class="endpoint-path">/api/pin/?username=:user&repo=:repo</div>
+          <div class="endpoint-desc">Tarjeta de repositorio pinneado con descripción, estrellas y lenguaje</div>
+        </div>
+      </div>
+      <div class="endpoint-item">
+        <span class="method">GET</span>
+        <div>
+          <div class="endpoint-path">/api/wakatime?username=:user</div>
+          <div class="endpoint-desc">Tarjeta de tiempo de desarrollo con integración WakaTime</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    Fork de <a href="https://github.com/anuraghazra/github-readme-stats" target="_blank" rel="noopener">github-readme-stats</a>
+    · Mantenido por <a href="https://github.com/jeanpierre-max" target="_blank" rel="noopener">@jeanpierre-max</a>
+    · Deployado en <a href="https://vercel.com" target="_blank" rel="noopener">Vercel</a>
+  </footer>
+
+</body>
+</html>
