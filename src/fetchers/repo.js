@@ -1,8 +1,10 @@
 // @ts-check
 
+import githubUsernameRegex from "github-username-regex";
 import { MissingParamError } from "../common/error.js";
 import { request } from "../common/http.js";
 import { retryer } from "../common/retryer.js";
+import { logger } from "../common/log.js";
 
 /**
  * Repo data fetcher.
@@ -75,6 +77,10 @@ const fetchRepo = async (username, reponame) => {
   }
   if (!reponame) {
     throw new MissingParamError(["repo"], urlExample);
+  }
+  if (!githubUsernameRegex.test(username)) {
+    logger.log("Invalid username provided.");
+    throw new Error("Invalid username provided.");
   }
 
   let res = await retryer(fetcher, { login: username, repo: reponame });

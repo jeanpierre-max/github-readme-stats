@@ -6,7 +6,7 @@ import { runAndLogStats } from "./utils.js";
 
 const data_repo = {
   repository: {
-    username: "anuraghazra",
+    username: "jeanpierre-max",
     name: "convoychat",
     stargazers: {
       totalCount: 38000,
@@ -36,7 +36,7 @@ it("test /api/pin", async () => {
   await runAndLogStats("test /api/pin", async () => {
     const req = {
       query: {
-        username: "anuraghazra",
+        username: "jeanpierre-max",
         repo: "convoychat",
       },
     };

@@ -1,5 +1,6 @@
 // @ts-check
 
+import githubUsernameRegex from "github-username-regex";
 import { retryer } from "../common/retryer.js";
 import { logger } from "../common/log.js";
 import { excludeRepositories } from "../common/envs.js";
@@ -67,6 +68,10 @@ const fetchTopLanguages = async (
 ) => {
   if (!username) {
     throw new MissingParamError(["username"]);
+  }
+  if (!githubUsernameRegex.test(username)) {
+    logger.log("Invalid username provided.");
+    throw new Error("Invalid username provided.");
   }
 
   const res = await retryer(fetcher, { login: username });

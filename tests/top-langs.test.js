@@ -78,7 +78,7 @@ describe("Test /api/top-langs", () => {
   it("should test the request", async () => {
     const req = {
       query: {
-        username: "anuraghazra",
+        username: "jeanpierre-max",
       },
     };
     const res = {
@@ -96,7 +96,7 @@ describe("Test /api/top-langs", () => {
   it("should work with the query options", async () => {
     const req = {
       query: {
-        username: "anuraghazra",
+        username: "jeanpierre-max",
         hide_title: true,
         card_width: 100,
         title_color: "fff",
@@ -129,7 +129,7 @@ describe("Test /api/top-langs", () => {
   it("should render error card on user data fetch error", async () => {
     const req = {
       query: {
-        username: "anuraghazra",
+        username: "jeanpierre-max",
       },
     };
     const res = {
@@ -153,7 +153,7 @@ describe("Test /api/top-langs", () => {
   it("should render error card on incorrect layout input", async () => {
     const req = {
       query: {
-        username: "anuraghazra",
+        username: "jeanpierre-max",
         layout: ["pie"],
       },
     };
@@ -201,7 +201,7 @@ describe("Test /api/top-langs", () => {
   it("should render error card if wrong locale provided", async () => {
     const req = {
       query: {
-        username: "anuraghazra",
+        username: "jeanpierre-max",
         locale: "asdf",
       },
     };
@@ -225,7 +225,7 @@ describe("Test /api/top-langs", () => {
   it("should have proper cache", async () => {
     const req = {
       query: {
-        username: "anuraghazra",
+        username: "jeanpierre-max",
       },
     };
     const res = {
